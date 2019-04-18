@@ -35,7 +35,7 @@ func (lr *LogisticRegression) Fit(X base.FixedDataGrid) error {
 	return nil
 }
 
-func (lr *LogisticRegression) Predict(X base.FixedDataGrid) (base.FixedDataGrid, error) {
+func (lr *LogisticRegression) Predict(X base.FixedDataGrid) (base.UpdatableDataGrid, error) {
 
 	// Only support 1 class Attribute
 	classAttrs := X.AllClassAttributes()

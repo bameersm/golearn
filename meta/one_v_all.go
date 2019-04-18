@@ -92,7 +92,7 @@ func (m *OneVsAllModel) Fit(using base.FixedDataGrid) {
 // a given class) and 1 (indicating that the given instance is definitely
 // that class). For each instance, the class with the highest value is chosen.
 // The result is undefined if several underlying models output the same value.
-func (m *OneVsAllModel) Predict(what base.FixedDataGrid) (base.FixedDataGrid, error) {
+func (m *OneVsAllModel) Predict(what base.FixedDataGrid) (base.UpdatableDataGrid, error) {
 	ret := base.GeneratePredictionVector(what)
 	vecs := make([]base.FixedDataGrid, m.maxClassVal+1)
 	specs := make([]base.AttributeSpec, m.maxClassVal+1)

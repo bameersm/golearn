@@ -5,6 +5,7 @@ import (
 	"github.com/sjwhitworth/golearn/base"
 	"math/rand"
 	"runtime"
+	"strconv"
 	"strings"
 	"sync"
 )
@@ -16,7 +17,7 @@ type BaggedModel struct {
 	Models             []base.Classifier
 	RandomFeatures     int
 	lock               sync.Mutex
-	selectedAttributes map[int][]base.Attribute
+	SelectedAttributes map[int][]base.Attribute
 	fitOn              base.FixedDataGrid
 }
 
@@ -50,7 +51,7 @@ func (b *BaggedModel) generateTrainingAttrs(model int, from base.FixedDataGrid) 
 		ret = append(ret, a)
 	}
 	b.lock.Lock()
-	b.selectedAttributes[model] = ret
+	b.SelectedAttributes[model] = ret
 	b.lock.Unlock()
 	return ret
 }
@@ -59,7 +60,7 @@ func (b *BaggedModel) generateTrainingAttrs(model int, from base.FixedDataGrid) 
 // requested base.Instances with only the base.Attributes selected
 // for training the model.
 func (b *BaggedModel) generatePredictionInstances(model int, from base.FixedDataGrid) base.FixedDataGrid {
-	selected := b.selectedAttributes[model]
+	selected := b.SelectedAttributes[model]
 	return base.NewInstancesViewFromAttrs(from, selected)
 }
 
@@ -82,7 +83,7 @@ func (b *BaggedModel) AddModel(m base.Classifier) {
 // Instances.
 func (b *BaggedModel) Fit(from base.FixedDataGrid) {
 	var wait sync.WaitGroup
-	b.selectedAttributes = make(map[int][]base.Attribute)
+	b.SelectedAttributes = make(map[int][]base.Attribute)
 	for i, m := range b.Models {
 		wait.Add(1)
 		go func(c base.Classifier, f base.FixedDataGrid, model int) {
@@ -100,7 +101,7 @@ func (b *BaggedModel) Fit(from base.FixedDataGrid) {
 //
 // IMPORTANT: in the event of a tie, the first class which
 // achieved the tie value is output.
-func (b *BaggedModel) Predict(from base.FixedDataGrid) (base.FixedDataGrid, error) {
+func (b *BaggedModel) Predict(from base.FixedDataGrid) (base.UpdatableDataGrid, error) {
 	n := runtime.NumCPU()
 	// Channel to receive the results as they come in
 	votes := make(chan base.DataGrid, n)
@@ -175,6 +176,9 @@ func (b *BaggedModel) Predict(from base.FixedDataGrid) (base.FixedDataGrid, erro
 			}
 		}
 		base.SetClass(ret, i, maxClass)
+		ratio := float64(voting[i]["1.000000"]) / float64(len(b.Models))
+		finalDecision := strconv.FormatFloat(ratio, 'f', 16, 64)
+		base.SetClass(ret, i, finalDecision)
 	}
 	return ret, nil
 }
@@ -227,7 +231,7 @@ func (b *BaggedModel) Load(filePath string) error {
 	Models             []base.Classifier
 	RandomFeatures     int
 	lock               sync.Mutex
-	selectedAttributes map[int][]base.Attribute, always RandomFeatures in length
+	SelectedAttributes map[int][]base.Attribute, always RandomFeatures in length
 }*/
 func (b *BaggedModel) SaveWithPrefix(writer *base.ClassifierSerializer, prefix string) error {
 	b.lock.Lock()
@@ -253,7 +257,7 @@ func (b *BaggedModel) SaveWithPrefix(writer *base.ClassifierSerializer, prefix s
 
 	// Save the classifiers
 	for i, c := range b.Models {
-		clsPrefix := fmt.Sprintf("%s/", pI("CLASSIFIERS", i))
+		clsPrefix := fmt.Sprintf("%s", pI("CLASSIFIERS", i))
 		err = c.SaveWithPrefix(writer, clsPrefix)
 		if err != nil {
 			return base.FormatError(err, "Can't save classifier %d", i)
@@ -266,12 +270,12 @@ func (b *BaggedModel) SaveWithPrefix(writer *base.ClassifierSerializer, prefix s
 		return base.DescribeError("Can't write REFERENCE_INSTANCES", err)
 	}
 
-	// Save the selectedAttributes map
-	selectedAttributesKey := writer.Prefix(prefix, "SELECTED_ATTRIBUTES")
+	// Save the SelectedAttributes map
+	SelectedAttributesKey := writer.Prefix(prefix, "SELECTED_ATTRIBUTES")
 	ser := make(map[int][][]byte)
-	for key := range b.selectedAttributes {
+	for key := range b.SelectedAttributes {
 		ser[key] = make([][]byte, 0)
-		for _, a := range b.selectedAttributes[key] {
+		for _, a := range b.SelectedAttributes[key] {
 			bytes, err := base.SerializeAttribute(a)
 			if err != nil {
 				return base.DescribeError("Can't serialize Attribute", err)
@@ -280,7 +284,7 @@ func (b *BaggedModel) SaveWithPrefix(writer *base.ClassifierSerializer, prefix s
 		}
 	}
 
-	err = writer.WriteJSONForKey(selectedAttributesKey, ser)
+	err = writer.WriteJSONForKey(SelectedAttributesKey, ser)
 	if err != nil {
 		return base.DescribeError("Can't write selected attributes map", err)
 	}
@@ -308,7 +312,7 @@ func (b *BaggedModel) LoadWithPrefix(reader *base.ClassifierDeserializer, prefix
 
 	// Reload the classifiers
 	for i, m := range b.Models {
-		clsPrefix := fmt.Sprintf("%s/", pI("CLASSIFIERS", i))
+		clsPrefix := fmt.Sprintf("%s", pI("CLASSIFIERS", i))
 		err := m.LoadWithPrefix(reader, clsPrefix)
 		if err != nil {
 			return base.DescribeError("Can't read classifier", err)
@@ -323,17 +327,17 @@ func (b *BaggedModel) LoadWithPrefix(reader *base.ClassifierDeserializer, prefix
 	b.fitOn = tmp
 
 	// Reload the selected attributes
-	selectedAttributesKey := reader.Prefix(prefix, "SELECTED_ATTRIBUTES")
+	SelectedAttributesKey := reader.Prefix(prefix, "SELECTED_ATTRIBUTES")
 	ser := make(map[int][][]byte)
-	err = reader.GetJSONForKey(selectedAttributesKey, &ser)
+	err = reader.GetJSONForKey(SelectedAttributesKey, &ser)
 	if err != nil {
 		return base.DescribeError("Can't reload selected attributes", err)
 	}
 
-	b.selectedAttributes = make(map[int][]base.Attribute)
+	b.SelectedAttributes = make(map[int][]base.Attribute)
 
 	for key := range ser {
-		b.selectedAttributes[key] = make([]base.Attribute, len(ser[key]))
+		b.SelectedAttributes[key] = make([]base.Attribute, len(ser[key]))
 		for i, attrBytes := range ser[key] {
 			attr, err := base.DeserializeAttribute(attrBytes)
 			if err != nil {
@@ -343,7 +347,7 @@ func (b *BaggedModel) LoadWithPrefix(reader *base.ClassifierDeserializer, prefix
 			if err != nil {
 				return base.DescribeError("Can't replace attribute", err)
 			}
-			b.selectedAttributes[key][i] = attrNew
+			b.SelectedAttributes[key][i] = attrNew
 		}
 	}
 	return nil

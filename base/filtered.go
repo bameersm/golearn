@@ -61,7 +61,7 @@ func (l *LazilyFilteredInstances) GetAttribute(target Attribute) (AttributeSpec,
 	for i, a := range l.attrs {
 		if a.New.Equals(target) {
 			ret.position = i
-			ret.attr = target
+			ret.Attr = target
 			return ret, nil
 		}
 	}
@@ -142,7 +142,7 @@ func (l *LazilyFilteredInstances) transformNewToOldAttribute(as AttributeSpec) (
 		return as, nil
 	}
 	for _, a := range l.attrs {
-		if a.Old.Equals(as.attr) || a.New.Equals(as.attr) {
+		if a.Old.Equals(as.Attr) || a.New.Equals(as.Attr) {
 			as, err := l.src.GetAttribute(a.Old)
 			if err != nil {
 				return AttributeSpec{}, fmt.Errorf("Internal error in Attribute resolution: '%s'", err)
@@ -160,10 +160,10 @@ func (l *LazilyFilteredInstances) Get(as AttributeSpec, row int) []byte {
 		panic(fmt.Sprintf("Attribute %s could not be resolved. (Error: %s)", as.String(), err.Error()))
 	}
 	byteSeq := l.src.Get(asOld, row)
-	if l.unfilteredMap[as.attr] {
+	if l.unfilteredMap[as.Attr] {
 		return byteSeq
 	}
-	newByteSeq := l.filter.Transform(asOld.attr, as.attr, byteSeq)
+	newByteSeq := l.filter.Transform(asOld.Attr, as.Attr, byteSeq)
 	return newByteSeq
 }
 
@@ -186,7 +186,7 @@ func (l *LazilyFilteredInstances) MapOverRows(asv []AttributeSpec, mapFunc func(
 	newRowBuf := make([][]byte, len(asv))
 	return l.src.MapOverRows(oldAsv, func(oldRow [][]byte, oldRowNo int) (bool, error) {
 		for i, b := range oldRow {
-			newField := l.filter.Transform(oldAsv[i].attr, asv[i].attr, b)
+			newField := l.filter.Transform(oldAsv[i].Attr, asv[i].Attr, b)
 			newRowBuf[i] = newField
 		}
 		return mapFunc(newRowBuf, oldRowNo)
@@ -208,7 +208,7 @@ func (l *LazilyFilteredInstances) RowString(row int) string {
 			prefix = ""
 		}
 		val := l.Get(a, row) // Retrieve filtered value
-		buffer.WriteString(fmt.Sprintf("%s%s", prefix, a.attr.GetStringFromSysVal(val)))
+		buffer.WriteString(fmt.Sprintf("%s%s", prefix, a.Attr.GetStringFromSysVal(val)))
 	}
 
 	return buffer.String() // Return the result
@@ -242,10 +242,10 @@ func (l *LazilyFilteredInstances) String() string {
 
 	for _, a := range as {
 		prefix := "\t"
-		if l.classAttrs[a.attr] {
+		if l.classAttrs[a.Attr] {
 			prefix = "*\t"
 		}
-		buffer.WriteString(fmt.Sprintf("%s%s\n", prefix, a.attr))
+		buffer.WriteString(fmt.Sprintf("%s%s\n", prefix, a.Attr))
 	}
 
 	buffer.WriteString("\nData:\n")
@@ -253,7 +253,7 @@ func (l *LazilyFilteredInstances) String() string {
 		buffer.WriteString("\t")
 		for _, a := range as {
 			val := l.Get(a, i)
-			buffer.WriteString(fmt.Sprintf("%s ", a.attr.GetStringFromSysVal(val)))
+			buffer.WriteString(fmt.Sprintf("%s ", a.Attr.GetStringFromSysVal(val)))
 		}
 		buffer.WriteString("\n")
 	}

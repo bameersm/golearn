@@ -99,7 +99,7 @@ func (KNN *KNNClassifier) canUseOptimisations(what base.FixedDataGrid) bool {
 }
 
 // Predict returns a classification for the vector, based on a vector input, using the KNN algorithm.
-func (KNN *KNNClassifier) Predict(what base.FixedDataGrid) (base.FixedDataGrid, error) {
+func (KNN *KNNClassifier) Predict(what base.FixedDataGrid) (base.UpdatableDataGrid, error) {
 	// Check what distance function we are using
 	var distanceFunc pairwise.PairwiseDistanceFunc
 	switch KNN.DistanceFunc {

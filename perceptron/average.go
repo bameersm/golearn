@@ -98,7 +98,7 @@ func (p *AveragePerceptron) Fit(trainingData base.FixedDataGrid) {
 
 // param base.IFixedDataGrid
 // return base.IFixedDataGrid
-func (p *AveragePerceptron) Predict(what base.FixedDataGrid) base.FixedDataGrid {
+func (p *AveragePerceptron) Predict(what base.FixedDataGrid) base.UpdatableDataGrid {
 
 	if !p.trained {
 		panic("Cannot call Predict on an untrained AveragePerceptron")

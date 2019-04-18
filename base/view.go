@@ -21,7 +21,7 @@ func (v *InstancesView) addClassAttrsFromSrc(src FixedDataGrid) {
 		if v.attrs != nil {
 			matched = false
 			for _, b := range v.attrs {
-				if b.attr.Equals(a) {
+				if b.Attr.Equals(a) {
 					matched = true
 				}
 			}
@@ -125,7 +125,7 @@ func (v *InstancesView) GetAttribute(a Attribute) (AttributeSpec, error) {
 	// Otherwise
 	for _, r := range v.attrs {
 		// If the attribute matches...
-		if r.GetAttribute().Equals(a) {
+		if r.Attr.Equals(a) {
 			return r, nil
 		}
 	}
@@ -272,10 +272,10 @@ func (v *InstancesView) String() string {
 
 	for _, a := range as {
 		prefix := "\t"
-		if v.classAttrs[a.attr] {
+		if v.classAttrs[a.Attr] {
 			prefix = "*\t"
 		}
-		buffer.WriteString(fmt.Sprintf("%s%s\n", prefix, a.attr))
+		buffer.WriteString(fmt.Sprintf("%s%s\n", prefix, a.Attr))
 	}
 
 	// Print data
@@ -287,7 +287,7 @@ func (v *InstancesView) String() string {
 		buffer.WriteString("\t")
 		for _, a := range as {
 			val := v.Get(a, i)
-			buffer.WriteString(fmt.Sprintf("%s ", a.attr.GetStringFromSysVal(val)))
+			buffer.WriteString(fmt.Sprintf("%s ", a.Attr.GetStringFromSysVal(val)))
 		}
 		buffer.WriteString("\n")
 	}
@@ -314,7 +314,7 @@ func (v *InstancesView) RowString(row int) string {
 			prefix = ""
 			first = false
 		}
-		buffer.WriteString(fmt.Sprintf("%s%s", prefix, a.attr.GetStringFromSysVal(val)))
+		buffer.WriteString(fmt.Sprintf("%s%s", prefix, a.Attr.GetStringFromSysVal(val)))
 	}
 	return buffer.String()
 }

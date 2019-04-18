@@ -313,7 +313,7 @@ func (nb *BernoulliNBClassifier) PredictOne(vector [][]byte) string {
 //
 // IMPORTANT: Predict panics if Fit was not called or if the
 // document vector and train matrix have a different number of columns.
-func (nb *BernoulliNBClassifier) Predict(what base.FixedDataGrid) (base.FixedDataGrid, error) {
+func (nb *BernoulliNBClassifier) Predict(what base.FixedDataGrid) (base.UpdatableDataGrid, error) {
 	// Generate return vector
 	ret := base.GeneratePredictionVector(what)
 

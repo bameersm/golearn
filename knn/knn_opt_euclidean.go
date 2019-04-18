@@ -17,7 +17,7 @@ func (d distanceRecs) Len() int           { return len(d) }
 func (d distanceRecs) Swap(i, j int)      { d[i], d[j] = d[j], d[i] }
 func (d distanceRecs) Less(i, j int) bool { return d[i].dist < d[j].dist }
 
-func (KNN *KNNClassifier) optimisedEuclideanPredict(d *base.DenseInstances) base.FixedDataGrid {
+func (KNN *KNNClassifier) optimisedEuclideanPredict(d *base.DenseInstances) base.UpdatableDataGrid {
 
 	// Create return vector
 	ret := base.GeneratePredictionVector(d)

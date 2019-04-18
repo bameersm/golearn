@@ -74,7 +74,7 @@ func (rt *RandomTree) Fit(from base.FixedDataGrid) error {
 }
 
 // Predict returns a set of Instances containing predictions
-func (rt *RandomTree) Predict(from base.FixedDataGrid) (base.FixedDataGrid, error) {
+func (rt *RandomTree) Predict(from base.FixedDataGrid) (base.UpdatableDataGrid, error) {
 	return rt.Root.Predict(from)
 }
 

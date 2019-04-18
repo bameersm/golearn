@@ -10,7 +10,7 @@ import (
 type AttributeSpec struct {
 	pond     int
 	position int
-	attr     Attribute
+	Attr     Attribute
 }
 
 type byPosition []AttributeSpec
@@ -32,10 +32,10 @@ func (b byPosition) Less(i, j int) bool {
 // GetAttribute returns an AttributeSpec which matches a given
 // Attribute.
 func (a *AttributeSpec) GetAttribute() Attribute {
-	return a.attr
+	return a.Attr
 }
 
 // String returns a human-readable description of this AttributeSpec.
 func (a *AttributeSpec) String() string {
-	return fmt.Sprintf("AttributeSpec(Attribute: '%s', Pond: %d/%d)", a.attr, a.pond, a.position)
+	return fmt.Sprintf("AttributeSpec(Attribute: '%s', Pond: %d/%d)", a.Attr, a.pond, a.position)
 }

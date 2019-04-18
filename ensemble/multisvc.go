@@ -78,7 +78,7 @@ func (m *MultiLinearSVC) Fit(instances base.FixedDataGrid) error {
 // model which definitively reports a given class is the one chosen. The result is
 // undefined if all underlying models predict that the instance originates from some
 // other class.
-func (m *MultiLinearSVC) Predict(from base.FixedDataGrid) (base.FixedDataGrid, error) {
+func (m *MultiLinearSVC) Predict(from base.FixedDataGrid) (base.UpdatableDataGrid, error) {
 	return m.m.Predict(from)
 }
 

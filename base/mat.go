@@ -138,7 +138,7 @@ func (m *Mat64Instances) String() string {
 			prefix = "*\t"
 		}
 		cnt++
-		buffer.WriteString(fmt.Sprintf("%s%s\n", prefix, a.attr))
+		buffer.WriteString(fmt.Sprintf("%s%s\n", prefix, a.Attr))
 	}
 
 	buffer.WriteString("\nData:\n")
@@ -151,7 +151,7 @@ func (m *Mat64Instances) String() string {
 		buffer.WriteString("\t")
 		for _, a := range as {
 			val := m.Get(a, i)
-			buffer.WriteString(fmt.Sprintf("%s ", a.attr.GetStringFromSysVal(val)))
+			buffer.WriteString(fmt.Sprintf("%s ", a.Attr.GetStringFromSysVal(val)))
 		}
 		buffer.WriteString("\n")
 	}

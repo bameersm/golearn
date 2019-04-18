@@ -44,7 +44,7 @@ func (f *RandomForest) Fit(on base.FixedDataGrid) error {
 	f.Model = new(meta.BaggedModel)
 	f.Model.RandomFeatures = f.Features
 	for i := 0; i < f.ForestSize; i++ {
-		tree := trees.NewID3DecisionTree(0.00)
+		tree := trees.NewID3DecisionTree(0.2)
 		f.Model.AddModel(tree)
 	}
 	f.Model.Fit(on)
@@ -52,7 +52,7 @@ func (f *RandomForest) Fit(on base.FixedDataGrid) error {
 }
 
 // Predict generates predictions from a trained RandomForest.
-func (f *RandomForest) Predict(with base.FixedDataGrid) (base.FixedDataGrid, error) {
+func (f *RandomForest) Predict(with base.FixedDataGrid) (base.UpdatableDataGrid, error) {
 	return f.Model.Predict(with)
 }
 
@@ -95,5 +95,9 @@ func (f *RandomForest) Load(filePath string) error {
 
 func (f *RandomForest) LoadWithPrefix(reader *base.ClassifierDeserializer, prefix string) error {
 	f.Model = new(meta.BaggedModel)
+	for i := 0; i < f.ForestSize; i++ {
+		tree := trees.NewID3DecisionTree(0.00)
+		f.Model.AddModel(tree)
+	}
 	return f.Model.LoadWithPrefix(reader, prefix)
 }

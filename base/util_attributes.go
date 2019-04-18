@@ -42,13 +42,12 @@ func NonClassAttributes(d DataGrid) []Attribute {
 // ResolveAttributes returns AttributeSpecs describing
 // all of the Attributes.
 func ResolveAttributes(d DataGrid, attrs []Attribute) []AttributeSpec {
-	ret := make([]AttributeSpec, len(attrs))
 	n := len(attrs)
+	ret := make([]AttributeSpec, n)
 	for i := 0; i < n; i++ {
-		a := attrs[i]
-		spec, err := d.GetAttribute(a)
+		spec, err := d.GetAttribute(attrs[i])
 		if err != nil {
-			panic(fmt.Errorf("Error resolving Attribute %s: %s", a, err))
+			panic(fmt.Errorf("Error resolving Attribute %s: %s", attrs[i], err))
 		}
 		ret[i] = spec
 	}

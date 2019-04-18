@@ -41,6 +41,7 @@ func (f *FunctionalTarReader) GetNamedFile(name string) ([]byte, error) {
 		if err == io.EOF {
 			break
 		} else if err != nil {
+			break
 			return nil, err
 		}
 

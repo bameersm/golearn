@@ -221,8 +221,8 @@ func InferID3Tree(from base.FixedDataGrid, with RuleGenerator) *DecisionTreeNode
 
 	// If there are no more Attributes left to split on,
 	// return a DecisionTreeLeaf with the majority class
-	cols, _ := from.Size()
-	if cols == 2 {
+	cols, rows := from.Size()
+	if cols == 2 || rows < 5000 {
 		ret := &DecisionTreeNode{
 			LeafNode,
 			nil,
@@ -352,7 +352,7 @@ func (d *DecisionTreeNode) Prune(using base.FixedDataGrid) {
 }
 
 // Predict outputs a base.Instances containing predictions from this tree
-func (d *DecisionTreeNode) Predict(what base.FixedDataGrid) (base.FixedDataGrid, error) {
+func (d *DecisionTreeNode) Predict(what base.FixedDataGrid) (base.UpdatableDataGrid, error) {
 	predictions := base.GeneratePredictionVector(what)
 	classAttr := getClassAttr(predictions)
 	classAttrSpec, err := predictions.GetAttribute(classAttr)
@@ -546,7 +546,7 @@ func (t *ID3DecisionTree) Fit(on base.FixedDataGrid) error {
 }
 
 // Predict outputs predictions from the ID3 decision tree
-func (t *ID3DecisionTree) Predict(what base.FixedDataGrid) (base.FixedDataGrid, error) {
+func (t *ID3DecisionTree) Predict(what base.FixedDataGrid) (base.UpdatableDataGrid, error) {
 	return t.Root.Predict(what)
 }
 
@@ -587,5 +587,5 @@ func (t *ID3DecisionTree) Load(filePath string) error {
 
 func (t *ID3DecisionTree) LoadWithPrefix(reader *base.ClassifierDeserializer, prefix string) error {
 	t.Root = &DecisionTreeNode{}
-	return t.Root.LoadWithPrefix(reader, "")
+	return t.Root.LoadWithPrefix(reader, prefix)
 }

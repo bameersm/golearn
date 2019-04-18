@@ -70,7 +70,7 @@ func (m *MultiLayerNet) convertToFloatInsts(X base.FixedDataGrid) base.FixedData
 // Can only predict one CategoricalAttribute at a time, or up to n
 // FloatAttributes. Set or unset ClassAttributes to work around this
 // limitation.
-func (m *MultiLayerNet) Predict(X base.FixedDataGrid) base.FixedDataGrid {
+func (m *MultiLayerNet) Predict(X base.FixedDataGrid) base.UpdatableDataGrid {
 
 	// Create the return vector
 	ret := base.GeneratePredictionVector(X)

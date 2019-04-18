@@ -45,6 +45,19 @@ func testCanSaveLoadPredictions(trainData, testData base.FixedDataGrid) {
 	})
 }
 
+// func TestSaveAndLoad(t *testing.T) {
+
+// 	Convey("Predictions on filtered data with a Random Tree", t, func() {
+// 		instances, err := base.ParseCSVToInstances("../examples/datasets/iris_headers.csv", true)
+// 		So(err, ShouldBeNil)
+
+// 		trainData, testData := base.InstancesTrainTestSplit(instances, 0.6)
+
+// 		testCanSaveLoadPredictions(trainData, testData)
+// 	})
+
+// }
+
 func verifyTreeClassification(trainData, testData base.FixedDataGrid) {
 	rand.Seed(44414515)
 	Convey("Using InferID3Tree to create the tree and do the fitting", func() {

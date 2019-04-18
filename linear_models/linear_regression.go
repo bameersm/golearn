@@ -107,7 +107,7 @@ func (lr *LinearRegression) Fit(inst base.FixedDataGrid) error {
 	return nil
 }
 
-func (lr *LinearRegression) Predict(X base.FixedDataGrid) (base.FixedDataGrid, error) {
+func (lr *LinearRegression) Predict(X base.FixedDataGrid) (base.UpdatableDataGrid, error) {
 	if !lr.fitted {
 		return nil, NoTrainingDataError
 	}

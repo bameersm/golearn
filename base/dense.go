@@ -280,7 +280,12 @@ func (inst *DenseInstances) AllAttributes() []Attribute {
 	inst.lock.Lock()
 	defer inst.lock.Unlock()
 
-	ret := make([]Attribute, 0)
+	length := 0
+	for _, p := range inst.ags {
+		length += len(p.Attributes())
+	}
+
+	ret := make([]Attribute, 0, length)
 	for _, p := range inst.ags {
 		for _, a := range p.Attributes() {
 			ret = append(ret, a)
@@ -334,7 +339,7 @@ func (inst *DenseInstances) allClassAttributes() []Attribute {
 	var ret []Attribute
 	for a := range inst.classAttrs {
 		if inst.classAttrs[a] {
-			ret = append(ret, a.attr)
+			ret = append(ret, a.Attr)
 		}
 	}
 	return ret
@@ -513,7 +518,7 @@ func (inst *DenseInstances) String() string {
 		if inst.classAttrs[a] {
 			prefix = "*\t"
 		}
-		buffer.WriteString(fmt.Sprintf("%s%s\n", prefix, a.attr))
+		buffer.WriteString(fmt.Sprintf("%s%s\n", prefix, a.Attr))
 	}
 
 	buffer.WriteString("\nData:\n")
@@ -526,7 +531,7 @@ func (inst *DenseInstances) String() string {
 		buffer.WriteString("\t")
 		for _, a := range as {
 			val := inst.Get(a, i)
-			buffer.WriteString(fmt.Sprintf("%s ", a.attr.GetStringFromSysVal(val)))
+			buffer.WriteString(fmt.Sprintf("%s ", a.Attr.GetStringFromSysVal(val)))
 		}
 		buffer.WriteString("\n")
 	}

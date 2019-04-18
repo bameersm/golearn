@@ -184,7 +184,7 @@ func (lr *LinearSVC) Fit(X base.FixedDataGrid) error {
 }
 
 // Predict issues predictions from a trained LinearSVC.
-func (lr *LinearSVC) Predict(X base.FixedDataGrid) (base.FixedDataGrid, error) {
+func (lr *LinearSVC) Predict(X base.FixedDataGrid) (base.UpdatableDataGrid, error) {
 
 	// Only support 1 class Attribute
 	classAttrs := X.AllClassAttributes()

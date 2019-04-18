@@ -27,12 +27,13 @@ func (f *FixedAttributeGroup) RowSizeInBytes() int {
 
 // Attributes returns a slice of Attributes in this FixedAttributeGroup
 func (f *FixedAttributeGroup) Attributes() []Attribute {
-	ret := make([]Attribute, len(f.attributes))
-	// Add Attributes
-	for i, a := range f.attributes {
-		ret[i] = a
-	}
-	return ret
+	// ret := make([]Attribute, len(f.attributes))
+	// // Add Attributes
+	// for i, a := range f.attributes {
+	// 	ret[i] = a
+	// }
+	// return ret
+	return f.attributes
 }
 
 // AddAttribute adds an attribute to this FixedAttributeGroup

@@ -350,7 +350,7 @@ func DecomposeOnAttributeValues(inst FixedDataGrid, at Attribute) map[string]Fix
 	inst.MapOverRows(fullAttrSpec, func(row [][]byte, rowNo int) (bool, error) {
 		// Find the output instance set
 		targetBytes := row[len(row)-1]
-		targetAttr := fullAttrSpec[len(fullAttrSpec)-1].attr
+		targetAttr := fullAttrSpec[len(fullAttrSpec)-1].Attr
 		targetSet := targetAttr.GetStringFromSysVal(targetBytes)
 		if _, ok := rowMaps[targetSet]; !ok {
 			rowMaps[targetSet] = make([]int, 0)

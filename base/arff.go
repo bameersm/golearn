@@ -50,7 +50,7 @@ func SerializeInstancesToWriterDenseARFFWithAttributes(w io.Writer, inst FixedDa
 
 	// Write Attribute information
 	for _, s := range attrs {
-		attr := s.attr
+		attr := s.Attr
 		t := "real"
 		if a, ok := attr.(*CategoricalAttribute); ok {
 			vals := a.GetValues()
@@ -63,7 +63,7 @@ func SerializeInstancesToWriterDenseARFFWithAttributes(w io.Writer, inst FixedDa
 	buf := make([]string, len(attrs))
 	inst.MapOverRows(attrs, func(val [][]byte, row int) (bool, error) {
 		for i, v := range val {
-			buf[i] = attrs[i].attr.GetStringFromSysVal(v)
+			buf[i] = attrs[i].Attr.GetStringFromSysVal(v)
 		}
 		fmt.Fprint(w, strings.Join(buf, ","))
 		fmt.Fprint(w, "\n")
@@ -228,12 +228,12 @@ func ParseDenseARFFBuildInstancesFromReader(r io.Reader, attrs []Attribute, u Up
 				}
 				for i, v := range r {
 					v = strings.TrimSpace(v)
-					if a, ok := specs[i].attr.(*CategoricalAttribute); ok {
+					if a, ok := specs[i].Attr.(*CategoricalAttribute); ok {
 						if val := a.GetSysVal(v); val == nil {
 							panic(fmt.Errorf("Unexpected class on line '%s'", line))
 						}
 					}
-					u.Set(specs[i], rowCounter, specs[i].attr.GetSysValFromString(v))
+					u.Set(specs[i], rowCounter, specs[i].Attr.GetSysValFromString(v))
 				}
 				rowCounter++
 			}
