@@ -1,8 +1,8 @@
 package trees_test
 
 import (
-	"github.com/sjwhitworth/golearn/base"
-	"github.com/sjwhitworth/golearn/ensemble"
+	"github.com/bameersm/golearn/base"
+	"github.com/bameersm/golearn/ensemble"
 	"testing"
 )
 

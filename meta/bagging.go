@@ -2,7 +2,7 @@ package meta
 
 import (
 	"fmt"
-	"github.com/sjwhitworth/golearn/base"
+	"github.com/bameersm/golearn/base"
 	"math/rand"
 	"runtime"
 	"strconv"

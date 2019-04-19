@@ -8,10 +8,10 @@ import (
 	"fmt"
 
 	"github.com/gonum/matrix"
-	"github.com/sjwhitworth/golearn/base"
-	"github.com/sjwhitworth/golearn/kdtree"
-	"github.com/sjwhitworth/golearn/metrics/pairwise"
-	"github.com/sjwhitworth/golearn/utilities"
+	"github.com/bameersm/golearn/base"
+	"github.com/bameersm/golearn/kdtree"
+	"github.com/bameersm/golearn/metrics/pairwise"
+	"github.com/bameersm/golearn/utilities"
 	"gonum.org/v1/gonum/mat"
 )
 

@@ -3,9 +3,9 @@ package main
 import (
 	"fmt"
 
-	"github.com/sjwhitworth/golearn/base"
-	"github.com/sjwhitworth/golearn/evaluation"
-	"github.com/sjwhitworth/golearn/knn"
+	"github.com/bameersm/golearn/base"
+	"github.com/bameersm/golearn/evaluation"
+	"github.com/bameersm/golearn/knn"
 )
 
 func main() {

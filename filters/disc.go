@@ -2,7 +2,7 @@ package filters
 
 import (
 	"fmt"
-	"github.com/sjwhitworth/golearn/base"
+	"github.com/bameersm/golearn/base"
 )
 
 type AbstractDiscretizeFilter struct {

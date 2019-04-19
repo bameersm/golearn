@@ -11,7 +11,7 @@ void golearn_liblinear_print_func_cgo(char *);
 import "C"
 
 import (
-	"github.com/sjwhitworth/golearn/base"
+	"github.com/bameersm/golearn/base"
 	"unsafe"
 )
 

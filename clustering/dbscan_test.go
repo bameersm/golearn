@@ -2,8 +2,8 @@ package clustering
 
 import (
 	"bufio"
-	"github.com/sjwhitworth/golearn/base"
-	"github.com/sjwhitworth/golearn/metrics/pairwise"
+	"github.com/bameersm/golearn/base"
+	"github.com/bameersm/golearn/metrics/pairwise"
 	. "github.com/smartystreets/goconvey/convey"
 	"gonum.org/v1/gonum/mat"
 	"math"

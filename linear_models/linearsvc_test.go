@@ -1,8 +1,8 @@
 package linear_models
 
 import (
-	"github.com/sjwhitworth/golearn/base"
-	//"github.com/sjwhitworth/golearn/filters"
+	"github.com/bameersm/golearn/base"
+	//"github.com/bameersm/golearn/filters"
 	. "github.com/smartystreets/goconvey/convey"
 	"testing"
 	//"reflect"

@@ -1,7 +1,7 @@
 package filters
 
 import (
-	"github.com/sjwhitworth/golearn/base"
+	"github.com/bameersm/golearn/base"
 	"math"
 )
 
